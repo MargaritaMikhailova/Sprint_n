@@ -94,9 +94,8 @@ class GetOrderTaxiPage(BasePage):
     @allure.step("Получить описание тарифа")
     def get_tariff_description(self):
         self.hover(Elements_check.ICON_ICON)
-        for tooltip in self.driver.find_elements(*Elements_check.TARIFF_TOOLTIP):
-            if tooltip.is_displayed():
-                return tooltip.text
+        tooltip = self.get_displayed_element(Elements_check.TARIFF_TOOLTIP)
+        return tooltip.text
 
     def move_away_from_icon(self):
         self.hover(Elements_check.CHOOSE_TARIFF)
@@ -178,9 +177,4 @@ class GetOrderTaxiPage(BasePage):
 
     @allure.step("Дождаться, что машина найдена")
     def wait_car_found(self):
-        def car_found(driver):
-            for el in driver.find_elements(*Elements_check.WAIT_TIMER_TAXI_TAB):
-                if el.is_displayed():
-                    return el
-            return False
-        return self.long_wait.until(car_found)
+        return self.wait_for_displayed_element(Elements_check.WAIT_TIMER_TAXI_TAB)

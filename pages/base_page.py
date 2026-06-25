@@ -67,5 +67,21 @@ class BasePage:
     def hover(self, locator):
         element = self.find_element(locator)
         action = ActionChains(self.driver).move_to_element(element)
-        action.perform() 
+        action.perform()
+
+    def find_elements(self, locator):
+        return self.driver.find_elements(*locator)
+
+    def get_displayed_element(self, locator):
+        for element in self.find_elements(locator):
+            if element.is_displayed():
+                return element
+
+    def wait_for_displayed_element(self, locator):
+        def element_is_displayed(driver):
+            for element in driver.find_elements(*locator):
+                if element.is_displayed():
+                    return element
+            return False
+        return self.long_wait.until(element_is_displayed)
 
